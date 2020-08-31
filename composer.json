@@ -1,0 +1,33 @@
+{
+  "name": "moga-kit/tpl-manager",
+  "version": "3.0",
+  "description": "Template Manager for MOGA-Kit Theme",
+  "type": "oxideshop-module",
+  "homepage": "https://github.com/moga-kit/tpl-manager",
+  "license": [
+    "GPL-3.0"
+  ],
+  "authors": [
+    {
+      "name": "Marat Bedoev",
+      "email": "hello@make-oxid-great-again.de"
+    }
+  ],
+  "extra": {
+    "oxideshop": {
+      "target-directory": "moga-kit/tpl-manager"
+    }
+  },
+  "require": {
+    "php": ">=7.1",
+    "oxid-esales/oxideshop-ce": "^v6.2",
+    "scssphp/scssphp": "^1.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "MogaKit\\TplManager\\": "../../../source/modules/moga-kit/tpl-manager"
+    }
+  }
+}
+
+

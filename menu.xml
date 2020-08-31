@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OX>
+    <OXMENU id="NAVIGATION_ESHOPADMIN">
+        <MAINMENU id="mxextensions">
+            <SUBMENU id="mogamanager" cl="mogamanager" />
+            <SUBMENU id="mogacustomizer" cl="mogacustomizer" />
+        </MAINMENU>
+    </OXMENU>
+</OX>
