@@ -2,51 +2,76 @@
 
 namespace MogaKit\TplManager\Application\Controller\Admin;
 
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use RecursiveRegexIterator;
-use RegexIterator;
-
 class Mogacustomizer extends \OxidEsales\Eshop\Application\Controller\Admin\AdminDetailsController
 {
     protected $_sThisTemplate = 'customizer.tpl';
 
-    public function getCustomSass() {
+    public function getCustomScss()
+    {
         $cfg = \OxidEsales\Eshop\Core\Registry::getConfig();
-        $sCustomSassFile = $cfg->getDir("custom.scss","src",false, null, null, "moga");
-//getDir($file, $this->_sResourceDir, $admin)
+        $sScssPath = $cfg->getDir(null, "src/scss", false, null, null, "moga");
+        $sCustomScssFile = $sScssPath."custom.scss";
 
-        //var_dump($sCustomSassFile);
-        //var_dump($sTemplate);
-//"custom.sass"
-        //$aTemplateOptions = glob($sTplPath.$sTemplate);
+        return (file_exists($sCustomScssFile) ? file_get_contents($sCustomScssFile) : "");
+    }
+    public function setCustomScss()
+    {
+        $request = oxNew(\OxidEsales\Eshop\Core\Request::class);
+        $sCustomScss = $request->getRequestEscapedParameter("customscss");
 
-        return file_get_contents($sCustomSassFile);
+        $cfg = \OxidEsales\Eshop\Core\Registry::getConfig();
+        $sScssPath = $cfg->getDir(null, "src/scss", false, null, null, "moga");
+        $sCustomScssFile = $sScssPath."custom.scss";
+
+        if (is_writable($sCustomScssFile)) {
+            file_put_contents($sCustomScssFile, $sCustomScss);
+        } else {
+            $this->getUtilsView()->addErrorToDisplay("custom.scss File is not writable");
+            return \OxidEsales\Eshop\Core\Registry::getUtilsView()->addErrorToDisplay('custom.scss File is not writable');
+        }
     }
 
-    public function getTemplates() {
+
+    public function preview()
+    {
         $cfg = \OxidEsales\Eshop\Core\Registry::getConfig();
+        $request = oxNew(\OxidEsales\Eshop\Core\Request::class);
 
-        //  function getDir($file, $dir, $admin, $lang = null, $shop = null, $theme = null, $absolute = true, $ignoreCust = false)
-        $sTplPath = $cfg->getDir(null, "tpl", false, null, null, "tpl-kit");
+        $aScssVariables = $request->getRequestEscapedParameter("scssvariables");
+        $css = $this->compileScss();
 
-        $directory = new RecursiveDirectoryIterator($sTplPath);
-        $iterator = new RecursiveIteratorIterator($directory, RecursiveIteratorIterator::CHILD_FIRST);
+        $sCssPath = $cfg->getDir(null, "src/css", false, null, null, "moga");
+        $sPreviewFilePath = $sCssPath."preview.css";
+        //var_dump($sPreviewFilePath);
 
-        $aTempaltes = [];
-
-        foreach ($iterator as $splFileInfo) {
-            if(in_array(basename($splFileInfo),[".",".."])) continue;
-            $path = $splFileInfo->isDir() ? array($splFileInfo->getFilename() => array()) : array($splFileInfo->getFilename());
-
-            for ($depth = $iterator->getDepth() - 1; $depth >= 0; $depth--) {
-                $path = array($iterator->getSubIterator($depth)->current()->getFilename() => $path);
-            }
-            $aTempaltes = array_merge_recursive($aTempaltes, $path);
+        if (!file_put_contents($sPreviewFilePath,$css)) {
+            return \OxidEsales\Eshop\Core\Registry::getUtilsView()->addErrorToDisplay('preview.css File is not writable');
         }
 
-        ksort($aTempaltes);
+        setcookie("scsspreview", true, time()+3600 , "/");
+    }
+    public function save()
+    {
+    }
 
-        return $aTempaltes;
+    private function compileScss($aScssVariables = false)
+    {
+        $cfg = \OxidEsales\Eshop\Core\Registry::getConfig();
+        $sTwbsVendorPath = str_replace("source", "vendor/twbs/bootstrap/scss", $cfg->getConfigParam('sShopDir'));
+        $sScssPath = $cfg->getDir(null, "src/scss", false, null, null, "moga");
+        //$sScssFile = $cfg->getDir("_variables.scss","src",false, null, null, "moga");
+
+        //var_dump($sScssPath);
+
+        try {
+            $scss = new \ScssPhp\ScssPhp\Compiler;
+            $scss->setImportPaths([$sTwbsVendorPath,$sScssPath]);
+            $css = $scss->compile('@import "moga";');
+
+            $autoprefixer  = new \Padaliyajay\PHPAutoprefixer\Autoprefixer($css);
+            return $autoprefixer->compile();
+        } catch (\Throwable $error) {
+            echo $error->getMessage();
+        }
     }
 }
