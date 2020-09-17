@@ -17,11 +17,13 @@ $aModule = [
     ],
     'templates' => [
         'customizer.tpl' => 'moga-kit/tpl-manager/Application/views/admin/customizer.tpl',
-        'tplmanager.tpl' => 'moga-kit/tpl-manager/Application/views/admin/tplmanager.tpl'
+        'tplmanager.tpl' => 'moga-kit/tpl-manager/Application/views/admin/tplmanager.tpl',
+        'report.tpl' => 'moga-kit/tpl-manager/Application/views/emails/report.tpl'
     ],
     'settings' => [
-        ['group' => 'mogaSettings', 'name' => 'mogaBootstrapColors', 'type' => 'str', 'value' => ''],
-        ['group' => 'mogaSettings', 'name' => 'oePayPalBannersHideAll', 'type' => 'bool', 'value' => 'false'],
-        ['group' => 'mogaSettings', 'name' => 'oePayPalBannersStartPage', 'type' => 'bool', 'value' => 'true']
+        ['group' => 'mogaSettings', 'name' => 'blSendReportOnSave', 'type' => 'bool', 'value' => false],
+
+        ['group' => 'mogaScss', 'name' => 'aMogaScssColors', 'type' => 'str', 'value' => ''],
+        ['group' => 'mogaScss', 'name' => 'aMogaScssFontsizes', 'type' => 'str', 'value' => '']
     ]
 ];
