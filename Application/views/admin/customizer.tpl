@@ -1,22 +1,4 @@
-<!doctype html>
-<html lang="en" ng-app="app">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.0/angular-csp.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-alpha1/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/fontawesome.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/solid.min.css"/>
-    <style type="text/css" media="screen">
-        #editor {
-            height: 500px;
-        }
-    </style>
-    <title>MOGA Customizer</title>
-</head>
-<body ng-controller="ctrl" class="p-4">
-
+[{include file=$oViewConf->getModulePath("tpl-manager","Application/views/admin/_head.tpl")}]
 <div class="accordion" id="customizerAccordion">
     [{* color scheme *}]
     <div class="card">
@@ -118,26 +100,8 @@
     </div>
 </div>
 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.0/angular.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.min.js"></script>
 <script>
-    var app = angular.module('app', []);
-    app.filter("html", ['$sce', function ($sce)
-    {
-        return function (htmlCode)
-        {
-            return $sce.trustAsHtml(htmlCode);
-        }
-    }]);
-    app.controller('ctrl', function ($scope, $http)
-    {
-
-        $scope.loading = {
-            'preview': 0,
-            'save': 0
-        };
+    [{capture name="ng"}]
 
         $scope.scssColors = [];
         $scope.getScssColors = function() {
@@ -167,24 +131,6 @@
         $scope.editor = ace.edit("editor");
         $scope.editor.setTheme("ace/theme/github");
         $scope.editor.session.setMode("ace/mode/sass");
-
-        var oxGet = function ($fnc, $data)
-        {
-            console.log("sending request to fnc " + $fnc);
-            console.log($data);
-            return $http({
-                method: 'POST',
-                url: '[{ $oViewConf->getSelfLink()|replace:"&amp;":"&" }]',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                params: {
-                    cl: '[{$oView->getClassName()}]',
-                    fnc: $fnc
-                },
-                data: $data || {}
-            });
-        };
 
         $scope.preview = function ()
         {
@@ -239,7 +185,6 @@
         // init stuff
         $scope.getScssColors();
         $scope.getScssFontsizes();
-    });
+    [{/capture}]
 </script>
-</body>
-</html>
+[{include file=$oViewConf->getModulePath("tpl-manager","Application/views/admin/_footer.tpl")}]

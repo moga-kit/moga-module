@@ -2,6 +2,8 @@
 
 namespace MogaKit\TplManager\Application\Controller\Admin;
 
+use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Request;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RecursiveRegexIterator;
@@ -31,6 +33,20 @@ class Mogamanager extends \OxidEsales\Eshop\Application\Controller\Admin\AdminDe
         return $aTemplateOptions;
     }
 
+    public function getDynamicOverrides() {
+        return unserialize(html_entity_decode(Registry::getUtilsServer()->getOxCookie("mogaDynamicOverrides")));
+    }
+    public function setDynamicOverrides() {
+        $aDynamicOverrides = [
+            "layout/header.tpl" => "layout/header/custom.tpl"
+        ];
+        $x = Registry::getUtilsServer()->setOxCookie("mogaDynamicOverrides", serialize($aDynamicOverrides));
+        die(json_encode([
+            "status" => "ok",
+            "data" => $aDynamicOverrides
+        ]));
+    }
+
     public function getTemplates() {
         $cfg = \OxidEsales\Eshop\Core\Registry::getConfig();
 
@@ -55,5 +71,12 @@ class Mogamanager extends \OxidEsales\Eshop\Application\Controller\Admin\AdminDe
         ksort($aTempaltes);
 
         return $aTempaltes;
+    }
+
+    public function setTemplate() {
+        /** @var Request $request */
+        $request = Registry::get(Request::class);
+        $sOldTemplate = $request->getRequestEscapedParameter("oldtemplate");
+        $sNewFile = $request->getRequestEscapedParameter("oldtemplate");
     }
 }

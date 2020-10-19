@@ -27,7 +27,7 @@ class Mogacustomizer extends \OxidEsales\Eshop\Application\Controller\Admin\Admi
 
         $cfg = \OxidEsales\Eshop\Core\Registry::getConfig();
         $sScssPath = $cfg->getDir(null, "src/scss", false, null, null, "moga");
-        $sCustomScssFile = $sScssPath . "custom.scss";
+        $sCustomScssFile = $sScssPath . "custom_code.scss";
 
         if (is_writable($sCustomScssFile)) {
             file_put_contents($sCustomScssFile, $sCustomScss);
@@ -98,7 +98,7 @@ class Mogacustomizer extends \OxidEsales\Eshop\Application\Controller\Admin\Admi
         $moduleSettingBridge->save('aMogaScssColors', json_encode($aMogaScssVariables), 'tpl-manager');
     }
     public function resetScssColors() {
-        $this->saveScssColors("");
+        $this->saveScssColors(null);
         $this->getScssColors();
     }
 
@@ -156,7 +156,7 @@ class Mogacustomizer extends \OxidEsales\Eshop\Application\Controller\Admin\Admi
         $moduleSettingBridge->save('aMogaScssFontsizes', json_encode($aMogaScssVariables), 'tpl-manager');
     }
     public function resetScssFontsizes() {
-        $this->saveScssFontsizes("");
+        $this->saveScssFontsizes(null);
         $this->getScssFontsizes();
     }
 

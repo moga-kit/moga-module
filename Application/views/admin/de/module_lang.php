@@ -16,5 +16,7 @@
 $sLangName = 'Deutsch';
 $aLang = array(
     'charset' => 'UTF-8',
-    'tplmanager' => '[Tpl-Kit] Manager'
+    'mogamanager' => 'MOGA Template Manager',
+    'mogacustomizer' => 'MOGA Customizer',
+    'mogatests' => 'MOGA Website Tests',
 );
