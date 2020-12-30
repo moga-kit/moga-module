@@ -1,5 +1,5 @@
 <?php
-namespace MogaKit\TplManager\Application\Core;
+namespace Moga\Application\Core;
 
 use OxidEsales\Eshop\Core\Registry;
 
@@ -31,6 +31,11 @@ class MogaSmarty extends \Smarty
     private $_aDynamicOverrides = null;
     private function _checkForDynamicOverride($params)
     {
+        // nix tun, wenn moga nicht aktiv ist
+        $activeThemeIds = oxNew(\OxidEsales\Eshop\Core\Theme::class)->getActiveThemesList();
+        if(!in_array("moga",$activeThemeIds)) return $params;
+
+        // nix tun, wenn user nicht angemeldet ist
         $oUser = Registry::getSession()->getUser();
         if(!$oUser || $oUser->oxuser__oxrights->value !== "malladmin") return $params;
 
@@ -38,8 +43,8 @@ class MogaSmarty extends \Smarty
 
         if(array_key_exists($params["smarty_include_tpl_file"],$this->_aDynamicOverrides)) {
             if(!array_key_exists("aMogaDynamicOverrides",$this->_tpl_vars)) $this->_tpl_vars["aMogaDynamicOverrides"] = [];
-            $this->_tpl_vars["aMogaDynamicOverrides"][$params["smarty_include_tpl_file"]] = $this->_aDynamicOverrides[$params["smarty_include_tpl_file"]];
-            print "overriding ".$params["smarty_include_tpl_file"]." to ".$this->_aDynamicOverrides[$params["smarty_include_tpl_file"]]."<br/>";
+            //$this->_tpl_vars["aMogaDynamicOverrides"][$params["smarty_include_tpl_file"]] = $this->_aDynamicOverrides[$params["smarty_include_tpl_file"]];
+            //print "overriding ".$params["smarty_include_tpl_file"]." to ".$this->_aDynamicOverrides[$params["smarty_include_tpl_file"]]."<br/>";
             $params["smarty_include_tpl_file"] = $this->_aDynamicOverrides[$params["smarty_include_tpl_file"]];
             //var_dump($this->_tpl_vars["aMogaDynamicOverrides"]);
         }

@@ -1,6 +1,6 @@
 <?php
 
-namespace MogaKit\TplManager\Application\Extend;
+namespace Moga\Application\Extend;
 
 class UtilsView extends UtilsView_parent
 {
@@ -17,7 +17,7 @@ class UtilsView extends UtilsView_parent
     {
         if (!self::$_oSmarty || $blReload) {
             $this->_aTemplateDir = [];
-            self::$_oSmarty = new \MogaKit\TplManager\Application\Core\MogaSmarty;
+            self::$_oSmarty = new \Moga\Application\Core\MogaSmarty;
             $this->_fillCommonSmartyProperties(self::$_oSmarty);
             $this->_smartyCompileCheck(self::$_oSmarty);
         }

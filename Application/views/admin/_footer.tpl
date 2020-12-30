@@ -1,8 +1,10 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.0/angular.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+[{* <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/2.0.6/velocity.min.js"></script> *}]
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lumx/1.9.11/lumx.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.min.js"></script>
 <script>
-    var app = angular.module('app', []);
+    var app = angular.module('app', ['lumx']);
     app.filter("html", ['$sce', function ($sce)
     {
         return function (htmlCode)
@@ -12,7 +14,10 @@
     }]);
     app.controller('ctrl', function ($scope, $http)
     {
-        $scope.loading = {};
+        $scope.loading = {
+            "save":0,
+            "preview":0
+        };
 
         var oxGet = function ($fnc, $data)
         {
@@ -33,6 +38,7 @@
         };
 
         [{$smarty.capture.ng}]
+
     });
 </script>
 </body>

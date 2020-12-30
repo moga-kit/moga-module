@@ -1,6 +1,6 @@
 <?php
 
-namespace MogaKit\TplManager\Application\Controller\Admin;
+namespace Moga\Application\Controller\Admin;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;

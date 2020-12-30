@@ -1,6 +1,6 @@
 <?php
 
-namespace MogaKit\TplManager\Application\Controller\Admin;
+namespace Moga\Application\Controller\Admin;
 
 use OxidEsales\Eshop\Core\Email;
 use OxidEsales\Eshop\Core\Registry;
@@ -86,7 +86,7 @@ class Mogacustomizer extends \OxidEsales\Eshop\Application\Controller\Admin\Admi
         $moduleSettingBridge = ContainerFactory::getInstance()
             ->getContainer()
             ->get(ModuleSettingBridgeInterface::class);
-        $value = $moduleSettingBridge->get('aMogaScssColors', 'tpl-manager');
+        $value = $moduleSettingBridge->get('aMogaScssColors', 'moga');
 
         die((is_array(json_decode($value)) ? $value : json_encode($default)));
     }
@@ -95,9 +95,10 @@ class Mogacustomizer extends \OxidEsales\Eshop\Application\Controller\Admin\Admi
         $moduleSettingBridge = ContainerFactory::getInstance()
             ->getContainer()
             ->get(ModuleSettingBridgeInterface::class);
-        $moduleSettingBridge->save('aMogaScssColors', json_encode($aMogaScssVariables), 'tpl-manager');
+        $moduleSettingBridge->save('aMogaScssColors', json_encode($aMogaScssVariables), 'moga');
     }
-    public function resetScssColors() {
+    public function resetScssColors()
+    {
         $this->saveScssColors(null);
         $this->getScssColors();
     }
@@ -144,7 +145,7 @@ class Mogacustomizer extends \OxidEsales\Eshop\Application\Controller\Admin\Admi
         $moduleSettingBridge = ContainerFactory::getInstance()
             ->getContainer()
             ->get(ModuleSettingBridgeInterface::class);
-        $value = $moduleSettingBridge->get('aMogaScssFontsizes', 'tpl-manager');
+        $value = $moduleSettingBridge->get('aMogaScssFontsizes', 'moga');
 
         die((is_array(json_decode($value)) ? $value : json_encode($default)));
     }
@@ -153,9 +154,10 @@ class Mogacustomizer extends \OxidEsales\Eshop\Application\Controller\Admin\Admi
         $moduleSettingBridge = ContainerFactory::getInstance()
             ->getContainer()
             ->get(ModuleSettingBridgeInterface::class);
-        $moduleSettingBridge->save('aMogaScssFontsizes', json_encode($aMogaScssVariables), 'tpl-manager');
+        $moduleSettingBridge->save('aMogaScssFontsizes', json_encode($aMogaScssVariables), 'moga');
     }
-    public function resetScssFontsizes() {
+    public function resetScssFontsizes()
+    {
         $this->saveScssFontsizes(null);
         $this->getScssFontsizes();
     }
@@ -163,10 +165,14 @@ class Mogacustomizer extends \OxidEsales\Eshop\Application\Controller\Admin\Admi
     private function sendCssReport($aNewScssColors, $aNewScssFontsizes)
     {
         $blSendReports = Registry::getConfig()->getConfigParam("blSendReportOnSave");
-        if (!$blSendReports) return;
+        if (!$blSendReports) {
+            return;
+        }
 
-        $aOldScssColors = json_decode(Registry::getConfig()->getConfigParam("aMogaScssColors", json_encode([])), true);
-        $aOldScssFontsizes = json_decode(Registry::getConfig()->getConfigParam("aMogaScssFontsizes", json_encode([])), true);
+        $aMogaScssColors = Registry::getConfig()->getConfigParam("aMogaScssColors", json_encode([]));
+        $aOldScssColors = json_decode($aMogaScssColors, true);
+        $aMogaScssFontsizes = Registry::getConfig()->getConfigParam("aMogaScssFontsizes", json_encode([]));
+        $aOldScssFontsizes = json_decode($aMogaScssFontsizes, true);
 
         $oEmail = oxNew(Email::class);
         $oEmail->setSubject("MOGA Customization Report");
@@ -178,7 +184,8 @@ class Mogacustomizer extends \OxidEsales\Eshop\Application\Controller\Admin\Admi
         $oEmail->setViewData("aOldScssFontsizes", $aOldScssFontsizes);
         $oEmail->setViewData("aNewScssFontsizes", $aNewScssFontsizes);
 
-        $oSmarty = Registry::getUtilsView()->getSmarty();;
+        $oSmarty = Registry::getUtilsView()->getSmarty();
+        ;
         $oSmarty->assign("oUser", Registry::getConfig()->getUser());
         $oSmarty->assign("aOldScssColors", $aOldScssColors);
         $oSmarty->assign("aNewScssColors", $aNewScssColors);
@@ -201,14 +208,22 @@ class Mogacustomizer extends \OxidEsales\Eshop\Application\Controller\Admin\Admi
 
         // check if file is writable before we start compiling
         if (file_exists($sPreviewFilePath) && !is_writable($sPreviewFilePath)) {
-            die(json_encode(["status" => "danger", "msg" => "<h3>preview.css file is not writable.</h3><br/>please check file permissions on out/moga/src/css/preview.css"]));
+            die(json_encode(["status" => "red", "msg" => "<h3>preview.css file is not writable.</h3><br/>please check file permissions on out/moga/src/css/preview.css"]));
         }
 
         $aPayload = json_decode(file_get_contents('php://input'), true);
-        $aScssColors = $aPayload["colors"];
-        $aScssFontsizes = $aPayload["fontsizes"];
-
         $aScssVariables = [];
+
+        foreach ($aPayload["colors"] as $var) {
+            $aScssVariables[$var["name"]] = (!empty($var["value"]) ? $var["value"] : $var["default"]);
+            //$sCustomScss .= "$".$var["name"].": ".(!empty($var["value"]) ? $var["value"] : $var["default"]).";\n";
+        }
+
+        foreach ($aPayload["fontsizes"] as $var) {
+            $aScssVariables[$var["name"]] = (!empty($var["value"]) ? $var["value"] : $var["default"]);
+            //$sCustomScss .= "$".$var["name"].": ".(!empty($var["value"]) ? $var["value"] : $var["default"]).";\n";
+        }
+
         //$sCustomScss = "// do not edit this file manually! it is generated by moga customizer and will be overwritten \n";
         foreach ($aPayload["variables"] as $var) {
             $aScssVariables[$var["name"]] = (!empty($var["value"]) ? $var["value"] : $var["default"]);
@@ -217,7 +232,7 @@ class Mogacustomizer extends \OxidEsales\Eshop\Application\Controller\Admin\Admi
 
         // save custom scss to a file
         //if(!file_put_contents($sCustomVariablesFilePath,$sCustomScss)) {
-        //    die(json_encode(["status" => "danger", "msg" => "<h3>custom_variables.scss file is not writable.</h3><br/>please check file permissions on out/moga/src/scss/custom_variables.scss"]));
+        //    die(json_encode(["status" => "red", "msg" => "<h3>custom_variables.scss file is not writable.</h3><br/>please check file permissions on out/moga/src/scss/custom_variables.scss"]));
         //}
 
         $css = $this->compileScss($aScssVariables);
@@ -225,18 +240,19 @@ class Mogacustomizer extends \OxidEsales\Eshop\Application\Controller\Admin\Admi
         if (!is_string($css)) {
             // Fehler!
             /** /Throwable $css */
-            die(json_encode(["status" => "danger", "msg" => "<h3>Error compiling SCSS:</h3><br/>" . $css->getMessage()]));
+            die(json_encode(["status" => "red", "msg" => "<h3>Error compiling SCSS:</h3><br/>" . $css->getMessage()]));
         }
 
 
         //var_dump($sPreviewFilePath);
 
         if (!file_put_contents($sPreviewFilePath, $css)) {
-            print json_encode(["status" => "danger", "msg" => "<h3>preview.css file is not writable.</h3><br/>please check file permissions on out/moga/src/css/preview.css"]);
+            $msg = "<h3>preview.css file is not writable.</h3><br/>please check file permissions on out/moga/src/css/preview.css";
+            print json_encode(["status" => "orange", "msg" => $msg]);
         } else {
             setcookie("scsspreview", true, time() + 3600, "/");
             $msg = "<h3>preview.css generated.</h3><br/>You can now log in as admin user and preview changes in your <a href='" . $cfg->getShopHomeUrl() . "' target='_blank'>Shop</a>";
-            print json_encode(["status" => "success", "msg" => $msg]);
+            print json_encode(["status" => "green", "msg" => $msg]);
         }
         die();
     }
@@ -271,8 +287,10 @@ class Mogacustomizer extends \OxidEsales\Eshop\Application\Controller\Admin\Admi
             }
             $css = $scss->compile('@import "moga";');
 
-            $autoprefixer = new \Padaliyajay\PHPAutoprefixer\Autoprefixer($css);
-            return $autoprefixer->compile();
+            return $css;
+
+            //$autoprefixer = new \Padaliyajay\PHPAutoprefixer\Autoprefixer($css);
+            //return $autoprefixer->compile();
         } catch (\Throwable $error) {
             return $error;
         }

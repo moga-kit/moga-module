@@ -1,6 +1,6 @@
 <?php
 
-namespace MogaKit\TplManager\Application\Extend;
+namespace Moga\Application\Extend;
 
 use OxidEsales\Eshop\Core\Registry;
 
@@ -13,6 +13,7 @@ class ShopControl extends ShopControl_parent
      *
      * @return string
      */
+    /*
     protected function _render($view) // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
     {
         $output = parent::_render($view);
@@ -36,4 +37,5 @@ class ShopControl extends ShopControl_parent
 
         return $output;
     }
+    */
 }

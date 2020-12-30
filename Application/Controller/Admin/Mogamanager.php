@@ -1,6 +1,6 @@
 <?php
 
-namespace MogaKit\TplManager\Application\Controller\Admin;
+namespace Moga\Application\Controller\Admin;
 
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Request;
@@ -16,8 +16,9 @@ class Mogamanager extends \OxidEsales\Eshop\Application\Controller\Admin\AdminDe
     public function getConfigurableTemplates() {
         // format: template => file name pattern
         return [
-            "header" => "layout/header/*",
-            "product" => "page/details"
+            "header" => $this->getTemplateOptions("layout/header/*.tpl"),
+            "tabs" => $this->getTemplateOptions("details/tabs/*.tpl"),
+            "footer" => $this->getTemplateOptions("layout/footer/*.tpl")
         ];
     }
 
@@ -25,10 +26,14 @@ class Mogamanager extends \OxidEsales\Eshop\Application\Controller\Admin\AdminDe
         $cfg = \OxidEsales\Eshop\Core\Registry::getConfig();
         $sTplPath = $cfg->getDir(null, "tpl", false, null, null, "tpl-kit");
 
-        var_dump($sTplPath);
-        var_dump($sTemplate);
+        $oModule = oxNew(\OxidEsales\Eshop\Core\Module\Module::class);
+        $sModulePath = $oModule->getModulePath("tpl-manager");
+        $pattern = $cfg->getModulesDir() . $sModulePath . DIRECTORY_SEPARATOR . "templates".DIRECTORY_SEPARATOR.$sTemplate;
 
-        $aTemplateOptions = glob($sTplPath.$sTemplate);
+        //var_dump($pattern);
+        $aTemplateOptions = glob($pattern);
+
+        return str_replace($cfg->getModulesDir() . $sModulePath . DIRECTORY_SEPARATOR . "templates".DIRECTORY_SEPARATOR,"",$aTemplateOptions);
 
         return $aTemplateOptions;
     }
