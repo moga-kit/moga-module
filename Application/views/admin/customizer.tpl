@@ -55,7 +55,7 @@
     <hr/>
 
     <div class="px+ mv++">
-        <div id="editor">[{$oView->getCustomScss()}]</div>
+        <div id="editor">[{$oView->getCustomStyles()}]</div>
     </div>
 
     <div class="px+ mv++" ng-if="response && response.msg.length > 0">
@@ -121,7 +121,7 @@
         oxGet('preview', {
             colors: $scope.scssColors,
             fontsizes: $scope.scssFontsizes,
-            customscss: $scope.editor.getValue()
+            customstyles: $scope.editor.getValue()
         }).then(
             function success(response) {
                 $scope.loading["preview"]--;
@@ -143,7 +143,7 @@
         oxGet('save', {
             colors: $scope.scssColors,
             fontsizes: $scope.scssFontsizes,
-            customscss: $scope.editor.getValue()
+            customsstyles: $scope.editor.getValue()
         }).then(
             function success(response) {
                 $scope.loading["save"]--;

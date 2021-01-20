@@ -22,9 +22,7 @@
     "php": ">=7.1",
     "ext-json": "*",
     "oxid-esales/oxideshop-ce": "^v6.2",
-    "twbs/bootstrap": "^5.0.0-beta1",
-    "scssphp/scssphp": "^1.2",
-    "padaliyajay/php-autoprefixer": "^1.2"
+    "scssphp/scssphp": "^1.2"
   },
   "autoload": {
     "psr-4": {
