@@ -61,10 +61,10 @@
     <div class="px+ mv++" ng-if="response && response.msg.length > 0">
         <div class="card p+" ng-class="'bgc-'+response.status+'-200'" ng-bind-html="response.msg | html"></div>
     </div>
-    <lx-progress lx-type="linear" lx-color="teal" ng-if="(loading.preview + loading.save) > 0"></lx-progress>
+    <lx-progress lx-type="linear" lx-color="teal" ng-if="(loading.preview + loading.live) > 0"></lx-progress>
     <div flex-container="row">
         <lx-button flex-item lx-type="raised" lx-color="yellow" ng-click="preview();"><b>preview</b></lx-button>
-        <lx-button flex-item lx-type="raised" lx-color="light-blue" ng-click="save();"><b>save</b></lx-button>
+        <lx-button flex-item lx-type="raised" lx-color="light-blue" ng-click="live();"><b>live</b></lx-button>
     </div>
 </div>
 <script>
@@ -137,23 +137,23 @@
             });
     };
 
-    $scope.save = function () {
+    $scope.live = function () {
         $scope.response = {};
-        $scope.loading["save"]++;
-        oxGet('save', {
+        $scope.loading["live"]++;
+        oxGet('live', {
             colors: $scope.scssColors,
             fontsizes: $scope.scssFontsizes,
             customsstyles: $scope.editor.getValue()
         }).then(
             function success(response) {
-                $scope.loading["save"]--;
+                $scope.loading["live"]--;
                 console.log("success", response);
                 $scope.response = response.data;
 
 
             },
             function error(response) {
-                $scope.loading["save"]--;
+                $scope.loading["live"]--;
                 console.log("error", response);
                 $scope.response = response.data;
             });
