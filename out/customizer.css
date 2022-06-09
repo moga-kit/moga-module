@@ -1,0 +1,4 @@
+#editor {
+    height: 500px;
+}
+input[type="color"] { min-height: 35px; }

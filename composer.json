@@ -21,7 +21,7 @@
     "php": ">=7.1",
     "ext-json": "*",
     "oxid-esales/oxideshop-ce": "^v6.2",
-    "scssphp/scssphp": "^1.2"
+    "scssphp/scssphp": "^1.4"
   },
   "autoload": {
     "psr-4": {

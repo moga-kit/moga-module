@@ -19,4 +19,9 @@ $aLang = array(
     'mogamanager' => 'MOGA Template Manager',
     'mogacustomizer' => 'MOGA Customizer',
     'mogatests' => 'MOGA Website Tests',
+
+    'MOGA_DIR_NOT_WRITABLE' => '<h4>Es fehlen Schreibrechte für den Ordner <em>%s</em></h4>',
+    'MOGA_FILE_NOT_WRITABLE' => '<h4>Es fehlen Schreibrechte für die Datei <em>%s</em></h4>',
+
+    'MOGA_PREVIEW_SUCCESS' => '<h3>Preview erfolgreich!</h3><br/>Du kannst dich jetzt mit deinem Administrator Konto im <a href="%s" target="_blank">Shop</a> anmelden, um die Vorschau zu sehen.'
 );

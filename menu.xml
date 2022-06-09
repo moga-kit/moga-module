@@ -3,7 +3,7 @@
     <OXMENU id="NAVIGATION_ESHOPADMIN">
         <MAINMENU id="mxextensions">
             <SUBMENU id="mogacustomizer" cl="mogacustomizer" />
-            <SUBMENU id="mogamanager" cl="mogamanager" />
+            <!-- ><SUBMENU id="mogamanager" cl="mogamanager" /> -->
         </MAINMENU>
     </OXMENU>
 </OX>
