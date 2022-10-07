@@ -25,6 +25,12 @@ $aModule = [
         //'tests.tpl' => 'moga/Application/views/admin/tests.tpl',
         'report.tpl' => 'moga/Application/views/emails/report.tpl'
     ],
+    'blocks' => [
+    [
+        'template' => 'base.tpl',
+        'block'    => 'base_style_overload',
+        'file'     => 'Application/views/blocks/base_style_overload.tpl'
+    ]
     'settings' => [
         ['group' => 'mogaSettings', 'name' => 'blSendReportOnSave', 'type' => 'bool', 'value' => false],
         ['group' => 'mogaScss', 'name' => 'aMogaScssColors', 'type' => 'str', 'value' => ''],
